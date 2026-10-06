@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "gazeclone",
+	"version": "${version}",
+	"name": "GazeClone",
+	"description": "Fabric mod for Minecraft where everything you look at starts multiplying.",
+	"authors": [
+		"ArisNight"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/user/ArisNight",
+		"sources": "https://github.com/arisnightt/GazeClone"
+	},
+	"license": "MIT",
+	"icon": "assets/gazeclone/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.arisnight.GazeClone"
+		],
+		"client": [
+			"net.arisnight.GazeCloneClient"
+		]
+
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
