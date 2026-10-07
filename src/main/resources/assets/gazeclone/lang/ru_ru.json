@@ -1,0 +1,6 @@
+{
+  "gazeclone.hud.multiplier": "Множитель: ",
+  "gazeclone.hud.advancements": "Ачивок: %s",
+  "gazeclone.stage.interval": "раз в %s сек",
+  "gazeclone.stage.multiplier": "x%s"
+}

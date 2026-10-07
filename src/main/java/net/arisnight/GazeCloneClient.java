@@ -9,6 +9,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 public class GazeCloneClient implements ClientModInitializer {
@@ -75,11 +76,11 @@ public class GazeCloneClient implements ClientModInitializer {
 
         int adv = advancements;
         int stage = Stages.stageFor(adv);
-        String label = Stages.label(stage);
+        Component label = Stages.label(stage);
 
-        String title = "Множитель: ";
-        String sep = "  \u2022 ";
-        String ach = "Ачивок: " + adv;
+        Component title = Component.translatable("gazeclone.hud.multiplier");
+        Component sep = Component.literal("  \u2022 ");
+        Component ach = Component.translatable("gazeclone.hud.advancements", adv);
 
         int textW = ICON_W + font.width(title) + font.width(label) + font.width(sep) + font.width(ach);
         int barW = SEGMENTS * SEG_W + (SEGMENTS - 1) * SEG_GAP;
@@ -147,7 +148,7 @@ public class GazeCloneClient implements ClientModInitializer {
         return x + ICON_W;
     }
 
-    private static int drawPart(GuiGraphicsExtractor graphics, Font font, String text, int x, int y, int color) {
+    private static int drawPart(GuiGraphicsExtractor graphics, Font font, Component text, int x, int y, int color) {
         graphics.text(font, text, x, y, color, true);
         return x + font.width(text);
     }

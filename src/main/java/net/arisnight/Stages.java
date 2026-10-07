@@ -1,5 +1,7 @@
 package net.arisnight;
 
+import net.minecraft.network.chat.Component;
+
 public final class Stages {
     private Stages() {}
 
@@ -30,14 +32,14 @@ public final class Stages {
         return multiplier(stage) - 1.0;
     }
 
-    public static String label(int stage) {
+    public static Component label(int stage) {
         return switch (stage) {
-            case 1 -> "раз в 3 сек";
-            case 2 -> "раз в 2 сек";
-            case 3 -> "раз в 1.5 сек";
-            case 4 -> "раз в 1 сек";
-            case 5 -> "x1.5";
-            default -> "x" + (stage - 4);
+            case 1 -> Component.translatable("gazeclone.stage.interval", "3");
+            case 2 -> Component.translatable("gazeclone.stage.interval", "2");
+            case 3 -> Component.translatable("gazeclone.stage.interval", "1.5");
+            case 4 -> Component.translatable("gazeclone.stage.interval", "1");
+            case 5 -> Component.translatable("gazeclone.stage.multiplier", "1.5");
+            default -> Component.translatable("gazeclone.stage.multiplier", String.valueOf(stage - 4));
         };
     }
 }

@@ -1,0 +1,6 @@
+{
+  "gazeclone.hud.multiplier": "Multiplier: ",
+  "gazeclone.hud.advancements": "Advancements: %s",
+  "gazeclone.stage.interval": "every %s sec",
+  "gazeclone.stage.multiplier": "x%s"
+}

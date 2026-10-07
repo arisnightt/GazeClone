@@ -7,7 +7,9 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -59,7 +61,7 @@ public class GazeClone implements ModInitializer {
             GazeCloneClient.init();
         }
 
-        LOGGER.info("Gaze Clone загружен: не смотри на дракона слишком долго.");
+        LOGGER.info("Gaze Clone loaded: don't stare at the dragon for too long.");
     }
 
     private void onServerTick(MinecraftServer server) {
@@ -114,7 +116,7 @@ public class GazeClone implements ModInitializer {
         double bestDistSqr = maxDistSqr;
 
         for (Entity candidate : level.getEntities(player, searchBox,
-                e -> !e.isRemoved() && !e.isSpectator() && !(e instanceof Player) && !isDragonPart(e))) {
+                e -> !e.isRemoved() && !e.isSpectator() && !(e instanceof Player) && !isDragonPart(e) && !isExcluded(e))) {
             AABB box = candidate.getBoundingBox().inflate(0.3);
             Optional<Vec3> hit = box.clip(eye, end);
             double distSqr;
@@ -134,8 +136,20 @@ public class GazeClone implements ModInitializer {
         return best;
     }
 
+    private static boolean isExcluded(Entity e) {
+        String path = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath();
+        return path.equals("cushion") || path.endsWith("_cushion")
+                || e.getClass().getSimpleName().contains("Cushion");
+    }
+
     private static boolean isDragonPart(Entity e) {
         return !(e instanceof EnderDragon) && e.getClass().getSimpleName().endsWith("Part");
+    }
+
+    private static boolean isCountable(AdvancementHolder holder) {
+        Advancement adv = holder.value();
+        // Корневые достижения вкладок (parent отсутствует) и рецепты (display отсутствует) не считаем.
+        return adv.parent().isPresent() && adv.display().isPresent();
     }
 
     private int refreshAdvancements(MinecraftServer server, ServerPlayer player) {
@@ -147,7 +161,7 @@ public class GazeClone implements ModInitializer {
 
         int count = 0;
         for (AdvancementHolder holder : server.getAdvancements().getAllAdvancements()) {
-            if (holder.value().display().isPresent()
+            if (isCountable(holder)
                     && player.getAdvancements().getOrStartProgress(holder).isDone()) {
                 count++;
             }
@@ -168,7 +182,8 @@ public class GazeClone implements ModInitializer {
     }
 
     private boolean duplicate(ServerLevel level, Entity original) {
-        if (original instanceof Player || original.isRemoved() || isDragonPart(original)) {
+        if (original instanceof Player || original.isRemoved()
+                || isDragonPart(original) || isExcluded(original)) {
             return false;
         }
 
@@ -192,7 +207,7 @@ public class GazeClone implements ModInitializer {
 
             return level.addFreshEntity(copy);
         } catch (Exception e) {
-            LOGGER.warn("Не удалось клонировать {}", original.getType(), e);
+            LOGGER.warn("Failed to clone {}", original.getType(), e);
             return false;
         }
     }
