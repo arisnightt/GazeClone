@@ -1,9 +1,16 @@
-# GazeClone
+# Gaze Clone
 
-## Setup
 
-For setup instructions, please see the [Fabric Documentation page](https://docs.fabricmc.net/develop/getting-started/creating-a-project#setting-up) related to the IDE that you are using.
+Everything you look at starts multiplying: mobs, items, arrows. Keep your gaze on a target and exact copies of it appear nearby. The more advancements you have, the faster the cloning goes.
 
-## License
+## How the speed grows
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+- **Stages 1-4:** +1 clone every 3, 2, 1.5, and 1 second.
+- **Stage 5 and up:** every second, the entity is multiplied by x1.5, x2, x3, x4, and so on.
+- Each new advancement adds +1 stage.
+
+An indicator above the hotbar shows the current stage, your advancement count, and a color bar running from green to red.
+
+## Good to know
+
+Players can't be cloned. The mod is required on both the server and the client.
